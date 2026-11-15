@@ -55,6 +55,15 @@ button{font:inherit;cursor:pointer}
 .picks button[aria-pressed="true"]{border-color:#fff;transform:scale(1.12)}
 .bar{width:180px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);overflow:hidden}
 .bar i{display:block;height:100%;width:0;background:#fff;transition:width .2s}
+.notebar{position:fixed;left:50%;transform:translateX(-50%);top:calc(60px + env(safe-area-inset-top,0px));z-index:7;display:flex;gap:6px;align-items:center;background:#fff;border-radius:999px;padding:6px 6px 6px 14px;box-shadow:0 4px 18px rgba(10,20,80,.25);font-size:14px;font-weight:600;color:#b4231f;white-space:nowrap;max-width:calc(100% - 16px);overflow-x:auto}
+.notebar button{border:0;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;background:#eef0f8;color:var(--ink)}
+.notebar #noteCopy{background:#d93a33;color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chips button{border:1px solid #d8cfc6;background:#fff;border-radius:999px;padding:8px 12px;font-size:14px}
+.chips button[aria-pressed="true"]{background:#d93a33;border-color:#d93a33;color:#fff}
+#noteText{width:100%;border:1px solid #d8cfc6;border-radius:12px;padding:12px;font:inherit;font-size:16px;resize:vertical;-webkit-user-select:text;user-select:text}
+.err{color:#b4231f;font-size:14px;margin:6px 0 0}
+.btn.ghost{background:#ebe3da;color:var(--ink)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){.act::before{animation:none}}
 </style>
@@ -63,7 +72,7 @@ button{font:inherit;cursor:pointer}
 <body>
 <div class="hud">
   <span class="pill" id="where"><b>Cafe 686</b>양산석산점</span>
-  <span class="r"><button class="pill" id="viewBtn" type="button">1인칭</button><button class="pill" id="resetBtn" type="button">처음으로</button></span>
+  <span class="r"><button class="pill" id="noteBtn" type="button">수정 메모</button><button class="pill" id="viewBtn" type="button">1인칭</button><button class="pill" id="resetBtn" type="button">처음으로</button></span>
 </div>
 <button class="act" id="act" type="button" hidden></button>
 <div class="joy" id="joy" hidden><i></i></div>
@@ -79,6 +88,23 @@ button{font:inherit;cursor:pointer}
   </div>
 </div>
 
+<div class="notebar" id="noteBar" hidden>
+  <span id="noteCount">고칠 곳을 화면에서 눌러주세요</span>
+  <button type="button" id="noteCopy">메모 복사</button>
+  <button type="button" id="noteClear">모두 지우기</button>
+  <button type="button" id="noteDone">끝내기</button>
+</div>
+<div class="sheet-wrap" id="noteWrap" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="noteTitle">
+    <div class="grab"></div>
+    <div class="kicker" id="noteWhere"></div>
+    <h2 id="noteTitle">무엇을 고칠까요?</h2>
+    <div class="chips" id="noteChips"></div>
+    <textarea id="noteText" rows="3" placeholder="예: 여기 파란 철창이어야 해 / 이 테이블 빼줘 (키보드 마이크로 말해도 돼요)"></textarea>
+    <p class="err" id="noteErr" hidden>내용을 적거나 위 버튼 중 하나를 눌러주세요.</p>
+    <div class="row"><button class="btn ghost" id="noteCancel" type="button">취소</button><button class="btn" id="noteSave" type="button">메모 남기기</button></div>
+  </div>
+</div>
 <div class="start" id="start">
   <div class="tag">SPECIALTY COFFEE &amp; BRUNCH</div>
   <div class="logo">Cafe 686</div>
@@ -442,7 +468,8 @@ col(0, 5.03, .62, 5.67);
   B(11.62, 0, ST.land, 11.77, 3.0, 9.4, M.pink);
   col(11.6, 1.28, 11.77, ST.land);
   // 1.5층 가장자리 유리 난간 + 포스터
-  B(12.75, F15, .86, 12.79, F15 + 1.05, ST.z1, M.glass); B(12.72, F15 + 1.03, .86, 12.83, F15 + 1.07, ST.z1, M.chrome);
+  for (let z = .95; z < ST.z1; z += .13) B(12.76, F15, z - .012, 12.785, F15 + 1.0, z + .012, M.blue);
+  B(12.73, F15 + .98, .86, 12.82, F15 + 1.04, ST.z1, M.blue); B(12.74, F15, .86, 12.81, F15 + .05, ST.z1, M.blue);
   col(12.75, .86, 12.86, ST.z1);
   // 계단참 아래벽, 뒤 통로 막음
   B(11.67, 0, ST.land - .05, 12.77, H, ST.land + .05, M.pink); B(11.62, 0, 9.38, 12.77, H, 9.55, M.pink);
@@ -667,7 +694,6 @@ seatNPC('#8a63d2', 1, 13.65, 7.8, 0, F15);
 const barista = makeChar('#f4efe6', 2, true); barista.root.position.set(9.6, 0, 3.82); barista.root.rotation.y = 0;
 NPC.push({ c:barista, walk:{ a:7.4, b:10.9, z:3.82, dir:1, wait:2 } });
 const guest = makeChar('#6b8fb5', 0); guest.root.position.set(7.9, 0, 1.95); guest.root.rotation.y = Math.PI; NPC.push({ c:guest });
-col(7.65, 1.7, 8.15, 2.2, 0);
 
 /* ================= 볼거리 지점 ================= */
 const SPOTS = [
@@ -750,7 +776,7 @@ function applyCam(){
 
 /* 입력 */
 const actBtn = document.getElementById('act');
-addEventListener('keydown', e => { keys[e.code] = true; if (e.code === 'KeyE' && !actBtn.hidden) actBtn.click(); });
+addEventListener('keydown', e => { if (e.target && e.target.tagName === 'TEXTAREA') return; keys[e.code] = true; if (e.code === 'KeyE' && !actBtn.hidden) actBtn.click(); });
 addEventListener('keyup', e => { keys[e.code] = false; });
 addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
 const cv = renderer.domElement, joyEl = document.getElementById('joy'), knob = joyEl.firstElementChild;
@@ -830,6 +856,76 @@ function npcStep(dt, t){
   }
 }
 
+
+/* ================= 수정 메모 (화면을 눌러 고칠 곳 표시) ================= */
+const NKEY = 'walk-notes-v1';
+let notes = []; try { notes = JSON.parse(localStorage.getItem(NKEY)) || []; } catch(e){}
+const noteBtn = document.getElementById('noteBtn'), noteBar = document.getElementById('noteBar'), noteWrap = document.getElementById('noteWrap');
+const noteText = document.getElementById('noteText'), noteErr = document.getElementById('noteErr'), noteCount = document.getElementById('noteCount');
+const CHIPS = ['빼주세요', '위치가 달라요', '모양이 달라요', '색이 달라요', '여기 뭔가 더 있어요', '크기가 달라요'];
+let noteMode = false, pending = null, chip = '';
+const pinMat = new THREE.MeshBasicMaterial({ color:'#e0302a', depthTest:false }), pinGroup = new THREE.Group(); scene.add(pinGroup);
+function areaName(x, y, z){
+  if (x < 0) return '매장 앞 거리'; if (z < 0) return '입구 로비';
+  if (x > 12.7 && y > 1.2) return '1.5층';
+  if (x > 11.55 && z < ST.land) return '계단';
+  if (x > 6.5 && x < 11.8 && z > 2.2 && z < 5.4) return '카운터';
+  if (x > 5 && z > 5.2) return '카운터 뒤 벽·주방';
+  if (x < 2.2 && z > 3.6) return '거리 쪽 창가';
+  if (z < 1.5) return '로비 유리 쪽 테이블';
+  return '1층 홀';
+}
+function drawPins(){
+  pinGroup.clear();
+  notes.forEach((n, i) => {
+    const g = new THREE.Group(); g.position.set(n.x, n.y, n.z);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(.09, 12, 10), pinMat); head.position.y = .32; head.renderOrder = 9; g.add(head);
+    const stick = new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .3, 6), pinMat); stick.position.y = .15; stick.renderOrder = 9; g.add(stick);
+    const tex = textTex([String(i + 1)], { w:64, h:64, font:'800 44px Outfit, sans-serif', color:'#ffffff' });
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map:tex, depthTest:false })); sp.scale.set(.16, .16, 1); sp.position.y = .32; sp.renderOrder = 10; g.add(sp);
+    pinGroup.add(g);
+  });
+  pinGroup.visible = noteMode;
+  noteCount.textContent = notes.length ? `메모 ${notes.length}개 · 더 누르면 추가돼요` : '고칠 곳을 화면에서 눌러주세요';
+}
+function saveNotes(){ try { localStorage.setItem(NKEY, JSON.stringify(notes)); } catch(e){} drawPins(); }
+document.getElementById('noteChips').innerHTML = CHIPS.map(c => `<button type="button" aria-pressed="false">${c}</button>`).join('');
+document.getElementById('noteChips').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; chip = b.getAttribute('aria-pressed') === 'true' ? '' : b.textContent; document.querySelectorAll('#noteChips button').forEach(x => x.setAttribute('aria-pressed', x.textContent === chip)); noteErr.hidden = true; });
+noteBtn.onclick = () => { noteMode = !noteMode; noteBar.hidden = !noteMode; noteBtn.textContent = noteMode ? '메모 중' : '수정 메모'; drawPins(); if (noteMode) showHint('고칠 곳을 화면에서 짧게 누르세요. 걷기·둘러보기는 그대로 돼요.', 5000); };
+document.getElementById('noteDone').onclick = () => noteBtn.click();
+let clearAsk = false;
+document.getElementById('noteClear').onclick = e => { if (!notes.length) return; if (!clearAsk){ clearAsk = true; e.target.textContent = '정말 지우기'; setTimeout(() => { clearAsk = false; e.target.textContent = '모두 지우기'; }, 3000); return; } notes = []; clearAsk = false; e.target.textContent = '모두 지우기'; saveNotes(); };
+document.getElementById('noteCopy').onclick = async () => {
+  if (!notes.length){ showHint('아직 메모가 없어요. 고칠 곳을 화면에서 눌러주세요.'); return; }
+  const txt = '[카페686 산책 수정 메모]\n' + notes.map((n, i) => `${i + 1}) ${n.area} (x${n.x.toFixed(1)} y${n.y.toFixed(1)} z${n.z.toFixed(1)}${n.what ? ' · ' + n.what : ''}): ${n.text}`).join('\n');
+  try { await navigator.clipboard.writeText(txt); showHint(`메모 ${notes.length}개를 복사했어요. 대화창에 붙여넣어 보내주세요.`); }
+  catch(e){ sheetWrap.hidden = false; document.getElementById('sheetKicker').textContent = '수정 메모'; document.getElementById('sheetTitle').textContent = '길게 눌러 복사하세요'; document.getElementById('sheetBody').innerHTML = '<textarea readonly style="width:100%;min-height:200px;font-size:14px;border-radius:10px;padding:10px;-webkit-user-select:text;user-select:text"></textarea>'; const ta = document.querySelector('#sheetBody textarea'); ta.value = txt; ta.focus(); ta.select(); }
+};
+const _ray = new THREE.Raycaster(), _ndc = new THREE.Vector2();
+function noteTap(cx, cy){
+  _ndc.set(cx / innerWidth * 2 - 1, -(cy / innerHeight) * 2 + 1);
+  _ray.setFromCamera(_ndc, camera);
+  const skip = new Set([pinGroup, ...SPOTS.map(s => s.ring)]);
+  const hit = _ray.intersectObjects(scene.children, true).find(h => { let o = h.object; while (o){ if (skip.has(o)) return false; o = o.parent; } return h.object.visible !== false; });
+  if (!hit) return;
+  const p = hit.point; pending = { x:p.x, y:p.y, z:p.z, area:areaName(p.x, p.y, p.z) };
+  document.getElementById('noteWhere').textContent = '선택한 곳 · ' + pending.area;
+  noteText.value = ''; chip = ''; document.querySelectorAll('#noteChips button').forEach(x => x.setAttribute('aria-pressed', 'false')); noteErr.hidden = true;
+  noteWrap.hidden = false;
+}
+document.getElementById('noteCancel').onclick = () => { noteWrap.hidden = true; pending = null; };
+document.getElementById('noteSave').onclick = () => {
+  const t = noteText.value.trim();
+  if (!t && !chip){ noteErr.hidden = false; return; }
+  notes.push({ ...pending, what:chip, text:t || chip }); pending = null; noteWrap.hidden = true; saveNotes();
+};
+noteText.addEventListener('input', () => { noteErr.hidden = true; });
+const taps = new Map();
+cv.addEventListener('pointerdown', e => taps.set(e.pointerId, { x:e.clientX, y:e.clientY, t:performance.now(), moved:false }));
+cv.addEventListener('pointermove', e => { const t = taps.get(e.pointerId); if (t && Math.hypot(e.clientX - t.x, e.clientY - t.y) > 8) t.moved = true; });
+cv.addEventListener('pointerup', e => { const t = taps.get(e.pointerId); taps.delete(e.pointerId); if (noteMode && t && !t.moved && performance.now() - t.t < 450) noteTap(e.clientX, e.clientY); });
+drawPins();
+
 /* ================= 시작 ================= */
 const startEl = document.getElementById('start'), startBtn = document.getElementById('startBtn'), picks = document.getElementById('picks');
 let myColor = COLORS[0];
@@ -848,7 +944,7 @@ addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; cam
 const clock = new THREE.Clock();
 renderer.setAnimationLoop(() => {
   const dt = Math.min(clock.getDelta(), .05), t = clock.elapsedTime;
-  if (startEl.hidden && sheetWrap.hidden) step(dt);
+  if (startEl.hidden && sheetWrap.hidden && noteWrap.hidden) step(dt);
   npcStep(dt, t);
   if (me) me.pose(dt, P.speed, t);
   applyCam(); updateUI(t);
