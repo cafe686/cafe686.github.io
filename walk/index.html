@@ -331,7 +331,7 @@ function windowGrid(axis, fixed, a0, a1, y0, y1, nA, nY, mat, t = .06){
 /* ================= 충돌 · 높이 ================= */
 const COL = []; // [x0,z0,x1,z1,층: 0=1층 1=2층 2=모두]
 const col = (x0, z0, x1, z1, l = 2) => COL.push([Math.min(mx(x0), mx(x1)), Math.min(z0, z1), Math.max(mx(x0), mx(x1)), Math.max(z0, z1), l]);
-const STAIR = { x0:.4, x1:1.9, z0:1, z1:7, top:3.2 };
+const STAIR = { x0:.4, x1:1.9, z0:1.6, z1:7, top:3.2 };
 const MEZZ = { x1:7, z0:7, y:3.2 };
 function floorAt(x, z, cur){
   x = mx(x);
@@ -448,9 +448,9 @@ B(-.15, 0, 0, 0, H, 7, M.pink); col(-.3, 0, .05, 16);
     B(STAIR.x0, 0, z0, STAIR.x1, top - .045, z1, i % 2 ? M.blue : M.blue);
     for (let k = 0; k < 3; k++){ const zz = z0 + (k + .5) * (z1 - z0) / 3; B(1.94, top, zz - .012, 1.965, top + .95, zz + .012, M.blue); }
   }
-  B(STAIR.x0, 0, 1, STAIR.x1, .02, 7, M.blue);
-  rod([1.955, .2 + .95, 1.0], [1.955, 3.2 + .95, 7.0], .03, M.blue, 8);
-  col(1.88, .95, 2.05, 7.0); col(.0, 0, .42, 7);
+  B(STAIR.x0, 0, STAIR.z0, STAIR.x1, .02, 7, M.blue);
+  rod([1.955, .2 + .95, STAIR.z0], [1.955, 3.2 + .95, 7.0], .03, M.blue, 8);
+  col(1.88, STAIR.z0 - .05, 2.05, 7.0); col(.0, 0, .42, 7);
 }
 // 2층 난간
 {
