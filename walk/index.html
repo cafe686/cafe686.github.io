@@ -231,6 +231,8 @@ const M = {
   leather: S({ color:'#a5532b', roughness:.5, envMapIntensity:.5 }),
   frame: S({ color:'#c9bfae', roughness:.6, envMapIntensity:.4 }),
   glass: new THREE.MeshPhysicalMaterial({ color:'#d6edf4', transparent:true, opacity:.18, roughness:.05, metalness:0, depthWrite:false, envMapIntensity:1.2, side:THREE.DoubleSide }),
+  glassP: new THREE.MeshPhysicalMaterial({ color:'#cfe8f0', transparent:true, opacity:.3, roughness:.05, metalness:0, depthWrite:false, envMapIntensity:1.6, side:THREE.DoubleSide }),
+  mirror: S({ color:'#dfe6ea', metalness:1, roughness:.06, envMapIntensity:1.4 }),
   glow: S({ color:'#ffffff', emissive:'#fff0d8', emissiveIntensity:1.7 }),
   led: S({ color:'#ffcf8a', emissive:'#ffa64a', emissiveIntensity:3 }),
   panelLight: S({ color:'#ffffff', emissive:'#ffffff', emissiveIntensity:1.4 }),
@@ -456,7 +458,7 @@ B(.12, 0, 7.2, .88, H, 7.9, M.pink); col(.1, 7.18, .9, 7.92);
   for (let i = 0; i < n; i++){
     const z0 = ST.z0 + i * run, top = (i + 1) * F15 / n;
     B(ST.x0, top - .04, z0 - .02, ST.x1, top, z0 + run, M.wood);
-    B(ST.x0, 0, z0, ST.x1, top - .04, z0 + run, M.blue);
+    B(ST.x0, 0, z0, ST.x1, top - .04, z0 + run, M.woodDark);
     for (let k = 0; k < 2; k++){ const zz = z0 + (k + .5) * run / 2; B(11.715, top, zz - .012, 11.74, top + .95, zz + .012, M.blue); }
   }
   B(ST.x0, F15 - .04, ST.z1, ST.x1, F15, ST.land, M.wood);
@@ -480,22 +482,25 @@ B(.12, 0, 7.2, .88, H, 7.9, M.pink); col(.1, 7.18, .9, 7.92);
 }
 // 1.5층 벽 · 창 · 민트 패널
 {
-  B(12.77, 0, .76, 17.97, F15 + .75, .86, M.pink); B(12.77, F15 + 2.75, .76, 17.97, H, .86, M.pink); B(12.77, F15 + .75, .76, 14.6, F15 + 2.75, .86, M.pink); B(17.4, F15 + .75, .76, 17.97, F15 + 2.75, .86, M.pink);
-  windowGrid('x', .8, 14.6, 17.4, F15 + .75, F15 + 2.75, 2, 2, M.frame, .08);
+  B(12.77, 0, .76, 17.97, H, .86, M.pink);
   col(12.75, .7, 18.1, .88);
   // 계단 옆 통로 쪽: 나무 반벽 + 유리 난간 (사진 4)
   B(12.74, 0, ST.land, 12.8, F15, 8.43, M.wood); B(12.74, F15, ST.land, 12.86, F15 + .95, 8.43, M.wood);
-  B(12.78, F15 + .95, ST.land, 12.82, F15 + 1.6, 8.43, M.glass); B(12.73, F15 + .93, ST.land, 12.87, F15 + .97, 8.43, M.chrome);
+  B(12.78, F15 + .95, ST.land, 12.82, F15 + 1.6, 8.43, M.glassP); B(12.73, F15 + .93, ST.land, 12.87, F15 + .97, 8.43, M.chrome); B(12.76, F15 + 1.58, ST.land, 12.84, F15 + 1.62, 8.43, M.chrome); for (const z of [ST.land + .02, 6.35, 8.41]) B(12.77, F15 + .95, z - .015, 12.83, F15 + 1.6, z + .015, M.chrome);
   B(12.74, 0, .86, 12.77, F15, ST.z1, M.wood);
   col(12.7, ST.land, 12.9, 8.45, 1);
   const wy0 = F15 + .75, wy1 = F15 + 2.75;
   // 오른쪽 벽 x=17.97: 분홍 벽 + 높은 가로창 (사진 5)
-  B(17.92, 0, .86, 18.07, 3.35, 9.45, M.pink); B(17.92, 3.95, .86, 18.07, H, 9.45, M.pink);
-  { let last = .86; for (const [a, b] of [[1.6, 3.4], [3.8, 5.6], [6.0, 7.8]]){ B(17.92, 3.35, last, 18.07, 3.95, a, M.pink); B(17.97, 3.35, a, 18.0, 3.95, b, M.glass); B(17.88, 3.33, a, 17.93, 3.97, b, M.white); last = b; } B(17.92, 3.35, last, 18.07, 3.95, 9.45, M.pink); }
+  B(17.92, 0, .86, 18.07, H, 9.45, M.pink);
+  { const m0 = 1.6 - .86, z0 = 1.6, z1 = 9.4 - m0, gap = .4, w = (z1 - z0 - 2 * gap) / 3, y = 3.65, h = .62;
+    for (let i = 0; i < 3; i++){ const zc = z0 + w / 2 + i * (w + gap);
+      put(boxGeo(.05, h + .14, w + .14), M.white, 17.88, y, zc, 0, 0, -.18);
+      put(boxGeo(.02, h, w), M.mirror, 17.85, y, zc, 0, 0, -.18); } }
   col(17.9, .8, 18.2, 9.5);
   // 아래 벽 z=9.45 + 창
   const wb0 = F15 + .05; B(12.72, 0, 9.4, 17.97, wb0, 9.55, M.pink); B(12.72, wy1, 9.4, 17.97, H, 9.55, M.pink); B(12.72, wb0, 9.4, 13.9, wy1, 9.55, M.pink); B(17.4, wb0, 9.4, 17.97, wy1, 9.55, M.pink);
-  windowGrid('x', 9.47, 13.9, 17.4, wb0, wy1, 2, 3, M.frame, .08);
+  windowGrid('x', 9.47, 13.9, 17.4, wb0, wy1, 2, 4, M.frame, .08);
+  { const rh = (wy1 - wb0) / 4; B(13.9, wb0, 9.44, 17.4, wb0 + rh, 9.49, M.steel); B(13.9, wy1 - rh, 9.44, 17.4, wy1, 9.49, M.steel); }
   col(12.7, 9.38, 18.1, 9.7);
   // 민트 패널 + 몰딩
   const t = F15 + 1.1;
@@ -630,9 +635,9 @@ const OCC = [];
 for (const [mat, geos] of [...buckets, ...RAW]){
   const list = geos.some(g => !g.index) ? geos.map(g => g.index ? g.toNonIndexed() : g) : geos;
   const mesh = new THREE.Mesh(mergeGeometries(list, false), mat);
-  const see = mat === M.glass || mat === M.glow || mat === M.led || mat === M.panelLight;
-  mesh.castShadow = !see; mesh.receiveShadow = mat !== M.glass;
-  if (mat === M.glass) mesh.renderOrder = 2;
+  const see = mat === M.glass || mat === M.glassP || mat === M.glow || mat === M.led || mat === M.panelLight;
+  mesh.castShadow = !see; mesh.receiveShadow = mat !== M.glass && mat !== M.glassP;
+  if (mat === M.glass || mat === M.glassP) mesh.renderOrder = 2;
   if ([M.pink, M.ceil, M.mint, M.corridorWall].includes(mat)) OCC.push(mesh);
   scene.add(mesh);
 }
@@ -905,7 +910,7 @@ function noteTap(cx, cy){
   _ndc.set(cx / innerWidth * 2 - 1, -(cy / innerHeight) * 2 + 1);
   _ray.setFromCamera(_ndc, camera);
   const skip = new Set([pinGroup, ...SPOTS.map(s => s.ring)]);
-  const hit = _ray.intersectObjects(scene.children, true).find(h => { let o = h.object; while (o){ if (skip.has(o)) return false; o = o.parent; } return h.object.visible !== false && h.object.material !== M.glass; });
+  const hit = _ray.intersectObjects(scene.children, true).find(h => { let o = h.object; while (o){ if (skip.has(o)) return false; o = o.parent; } return h.object.visible !== false && h.object.material !== M.glass && h.object.material !== M.glassP; });
   if (!hit) return;
   const p = hit.point; pending = { x:p.x, y:p.y, z:p.z, area:areaName(p.x, p.y, p.z) };
   document.getElementById('noteWhere').textContent = '선택한 곳 · ' + pending.area;
