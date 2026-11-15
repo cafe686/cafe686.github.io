@@ -439,27 +439,32 @@ col(0, 5.03, .62, 5.67);
   for (let z = ST.z1 + .1; z < ST.land; z += .16) B(11.715, F15, z - .012, 11.74, F15 + .95, z + .012, M.blue);
   // 카운터 쪽 반벽 + 뒤쪽 전체벽
   B(11.62, 0, 1.3, 11.72, 1.1, ST.land, M.pink); B(11.6, 1.1, 1.3, 11.74, 1.14, ST.land, M.wood);
-  B(11.62, 0, ST.land, 11.77, H, 7.9, M.pink);
+  B(11.62, 0, ST.land, 11.77, 3.0, 9.4, M.pink);
   col(11.6, 1.28, 11.77, ST.land);
   // 1.5층 가장자리 유리 난간 + 포스터
   B(12.75, F15, .86, 12.79, F15 + 1.05, ST.z1, M.glass); B(12.72, F15 + 1.03, .86, 12.83, F15 + 1.07, ST.z1, M.chrome);
   col(12.75, .86, 12.86, ST.z1);
   // 계단참 아래벽, 뒤 통로 막음
-  B(11.67, 0, ST.land - .05, 12.82, H, ST.land + .05, M.pink); B(11.77, 0, ST.land, 12.72, H, 9.45, M.pink);
-  col(11.6, ST.land - .05, 12.86, 9.6);
+  B(11.67, 0, ST.land - .05, 12.77, H, ST.land + .05, M.pink); B(11.62, 0, 9.38, 12.77, H, 9.55, M.pink);
+  floorPlane(11.77, 7.9, 12.77, 9.4, 0, tileTex, 1.2);
+  col(11.6, ST.land - .05, 12.75, 9.6, 0);
   // 계단 위 빈 칸
   B(12.77, 0, 0, 13.27, H, .76, M.pink); col(12.75, -.1, 13.3, .86);
 }
 // 1.5층 벽 · 창 · 민트 패널
 {
-  B(12.77, 0, .76, 17.97, H, .86, M.pink); col(12.75, .7, 18.1, .88);
-  B(12.72, 0, ST.land, 12.82, H, 9.45, M.pink); col(12.7, ST.land, 12.84, 9.5);
-  // 높은 실내창 (왼쪽 벽)
-  for (const [a, b] of [[5.0, 6.2], [6.5, 7.7], [8.0, 9.0]]){ B(12.83, 3.3, a, 12.85, 3.9, b, M.glass); B(12.82, 3.28, a, 12.87, 3.32, b, M.white); B(12.82, 3.88, a, 12.87, 3.92, b, M.white); B(12.82, 3.3, a - .02, 12.87, 3.9, a + .02, M.white); B(12.82, 3.3, b - .02, 12.87, 3.9, b + .02, M.white); }
-  // 오른쪽 벽 x=17.97 + 창
+  B(12.77, 0, .76, 17.97, F15 + .75, .86, M.pink); B(12.77, F15 + 2.75, .76, 17.97, H, .86, M.pink); B(12.77, F15 + .75, .76, 14.6, F15 + 2.75, .86, M.pink); B(17.4, F15 + .75, .76, 17.97, F15 + 2.75, .86, M.pink);
+  windowGrid('x', .8, 14.6, 17.4, F15 + .75, F15 + 2.75, 2, 2, M.frame, .08);
+  col(12.75, .7, 18.1, .88);
+  // 계단 옆 통로 쪽: 나무 반벽 + 유리 난간 (사진 4)
+  B(12.74, 0, ST.land, 12.8, F15, 8.43, M.wood); B(12.74, F15, ST.land, 12.86, F15 + .95, 8.43, M.wood);
+  B(12.78, F15 + .95, ST.land, 12.82, F15 + 1.6, 8.43, M.glass); B(12.73, F15 + .93, ST.land, 12.87, F15 + .97, 8.43, M.chrome);
+  B(12.74, 0, .86, 12.77, F15, ST.z1, M.wood);
+  col(12.7, ST.land, 12.9, 8.45, 1);
   const wy0 = F15 + .75, wy1 = F15 + 2.75;
-  B(17.92, 0, .86, 18.07, wy0, 9.45, M.pink); B(17.92, wy1, .86, 18.07, H, 9.45, M.pink); B(17.92, wy0, .86, 18.07, wy1, 1.4, M.pink); B(17.92, wy0, 8.8, 18.07, wy1, 9.45, M.pink);
-  windowGrid('z', 17.99, 1.4, 8.8, wy0, wy1, 4, 2, M.frame, .08);
+  // 오른쪽 벽 x=17.97: 분홍 벽 + 높은 가로창 (사진 5)
+  B(17.92, 0, .86, 18.07, 3.35, 9.45, M.pink); B(17.92, 3.95, .86, 18.07, H, 9.45, M.pink);
+  { let last = .86; for (const [a, b] of [[1.6, 3.4], [3.8, 5.6], [6.0, 7.8]]){ B(17.92, 3.35, last, 18.07, 3.95, a, M.pink); B(17.97, 3.35, a, 18.0, 3.95, b, M.glass); B(17.88, 3.33, a, 17.93, 3.97, b, M.white); last = b; } B(17.92, 3.35, last, 18.07, 3.95, 9.45, M.pink); }
   col(17.9, .8, 18.2, 9.5);
   // 아래 벽 z=9.45 + 창
   B(12.72, 0, 9.4, 17.97, wy0, 9.55, M.pink); B(12.72, wy1, 9.4, 17.97, H, 9.55, M.pink); B(12.72, wy0, 9.4, 13.9, wy1, 9.55, M.pink); B(17.4, wy0, 9.4, 17.97, wy1, 9.55, M.pink);
@@ -467,8 +472,8 @@ col(0, 5.03, .62, 5.67);
   col(12.7, 9.38, 18.1, 9.7);
   // 민트 패널 + 몰딩
   const t = F15 + 1.1;
-  B(17.88, F15, .86, 17.92, t, 9.4, M.mint); B(12.82, F15, 9.36, 17.92, t, 9.4, M.mint); B(12.82, F15, ST.land + .05, 12.86, t, 9.4, M.mint); B(13.6, F15, .86, 17.92, t, .9, M.mint);
-  B(17.85, t - .02, .86, 17.92, t + .03, 9.4, M.white); B(12.82, t - .02, 9.33, 17.92, t + .03, 9.4, M.white); B(12.82, t - .02, ST.land + .05, 12.89, t + .03, 9.4, M.white);
+  B(17.88, F15, .86, 17.92, t, 9.4, M.mint); B(12.82, F15, 9.36, 17.92, t, 9.4, M.mint); B(13.6, F15, .86, 17.92, t, .9, M.mint);
+  B(17.85, t - .02, .86, 17.92, t + .03, 9.4, M.white); B(12.82, t - .02, 9.33, 17.92, t + .03, 9.4, M.white); 
   // 기둥, 서비스 테이블
   B(12.82, 0, .86, 13.6, H, 1.45, M.pink); col(12.8, .84, 13.62, 1.47, 1);
   B(12.82, 0, 8.43, 13.6, H, 9.4, M.pink); col(12.8, 8.41, 13.62, 9.4, 1);
@@ -515,6 +520,13 @@ col(0, 5.03, .62, 5.67);
 }
 // 1층 홀 가구
 {
+  // 카운터 앞 흰 진열 테이블 (사진 1)
+  B(9.4, .9, 1.15, 11.2, .95, 1.65, M.top);
+  for (const [x, z] of [[9.45, 1.2], [11.15, 1.2], [9.45, 1.6], [11.15, 1.6]]) B(x - .02, 0, z - .02, x + .02, .9, z + .02, M.steel);
+  B(9.45, .25, 1.18, 11.15, .28, 1.22, M.steel); B(9.45, .25, 1.58, 11.15, .28, 1.62, M.steel);
+  for (let i = 0; i < 4; i++){ const x = 9.65 + i * .45; B(x - .13, .95, 1.22, x + .13, 1.26, 1.32, M.bag); put(new THREE.TorusGeometry(.06, .007, 6, 16, Math.PI), M.bag, x, 1.26, 1.27); }
+  for (let i = 0; i < 3; i++){ const x = 9.75 + i * .6; B(x - .17, .95, 1.4, x + .17, 1.11, 1.6, M.navy); }
+  col(9.35, 1.1, 11.25, 1.7, 0);
   // 로비 유리 쪽 4인 테이블 3개
   for (const tx of [2.08, 4.22, 6.36]){
     table(tx + .375, .65, .75, 1.2);
@@ -545,7 +557,7 @@ col(0, 5.03, .62, 5.67);
   table(16.46, 8.02, 2.4, .85, F15);
   for (const x of [15.6, 16.17, 16.75, 17.32]) for (const z of [7.27, 8.83]){ B(x - .2, F15, z - .2, x + .2, F15 + .38, z + .2, M.navy); B(x - .2, F15 + .38, z - .2, x + .2, F15 + .47, z + .2, M.leather); }
   col(15.24, 7.58, 17.68, 8.47, 1); col(15.38, 7.05, 17.54, 7.49, 1); col(15.38, 8.61, 17.54, 9.05, 1);
-  floorLamp(17.45, 6.75, F15);
+  floorLamp(13.85, 8.15, F15); floorLamp(17.55, 6.75, F15);
 }
 // 펜던트 조명
 for (const x of [7.3, 8.6, 9.9, 11.1]) pendant(x, 2.95, 2.85, .24, H - .1, true);
@@ -574,7 +586,7 @@ for (const [x, y, z, r] of [[13.35, 3.45, 5.06, .24], [13.35, 3.45, 7.2, .24], [
 picture(photo('logo.jpg'), 1.62, .71, 9.18, .58, 2.385, Math.PI, { glow:'#ffb466', glowI:.55, rough:.5 });
 picture(photo('banner.jpg'), 1.19, 3.3, 12.5, 1.7, -.07, Math.PI, { double:true, noShadow:true });
 picture(photo('posters2.jpg'), 1.2, .85, 10.55, 1.55, -.07, Math.PI, { double:true, noShadow:true });
-picture(photo('posters.jpg'), 2.2, .58, 12.84, F15 + .74, 2.05, Math.PI / 2);
+{ const pt = photo('posters.jpg'); for (const z of [5.4, 7.45]) picture(pt, 1.95, .52, 12.83, F15 + 1.27, z, Math.PI / 2); }
 picture(photo('latte.jpg'), .38, .33, 8.22, 1.22, 2.5, Math.PI);
 picture(photo('shirt.jpg'), .42, .84, .605, 1.95, 5.35, Math.PI / 2);
 picture(textTex(['ORDER'], { w:256, h:64, font:'800 44px Outfit, sans-serif', color:'#1d1e22' }), .42, .1, 7.05, .86, 2.385, Math.PI, { transparent:true });
@@ -654,19 +666,19 @@ seatNPC('#f2b632', 0, 16.86, 3.3, Math.PI / 2, F15);
 seatNPC('#8a63d2', 1, 13.65, 7.8, 0, F15);
 const barista = makeChar('#f4efe6', 2, true); barista.root.position.set(9.6, 0, 3.82); barista.root.rotation.y = 0;
 NPC.push({ c:barista, walk:{ a:7.4, b:10.9, z:3.82, dir:1, wait:2 } });
-const guest = makeChar('#6b8fb5', 0); guest.root.position.set(8.9, 0, 1.8); guest.root.rotation.y = Math.PI; NPC.push({ c:guest });
-col(8.62, 1.55, 9.18, 2.05, 0);
+const guest = makeChar('#6b8fb5', 0); guest.root.position.set(7.9, 0, 1.95); guest.root.rotation.y = Math.PI; NPC.push({ c:guest });
+col(7.65, 1.7, 8.15, 2.2, 0);
 
 /* ================= 볼거리 지점 ================= */
 const SPOTS = [
   { id:'slogan', label:'문구 보기', x:12.2, z:-1.3, lvl:0, r:1.5 },
-  { id:'counter', label:'카운터 보기', x:9.9, z:1.75, lvl:0, r:1.1 },
-  { id:'shelf', label:'원두 선반 보기', x:7.3, z:1.75, lvl:0, r:1.0 },
+  { id:'counter', label:'카운터 보기', x:8.9, z:1.95, lvl:0, r:.8 },
+  { id:'shelf', label:'원두 선반 보기', x:6.9, z:1.95, lvl:0, r:.75 },
   { id:'goods', label:'티셔츠 보기', x:2.25, z:5.35, lvl:0, r:.8 },
   { id:'sitWindow', label:'창가 자리에 앉기', x:2.6, z:4.4, lvl:0, r:.8, sit:{ x:1.9, z:4.82, yaw:Math.PI / 2, y:0 } },
   { id:'sitTop', label:'로비 쪽 자리에 앉기', x:3.25, z:1.9, lvl:0, r:.9, sit:{ x:3.92, z:.95, yaw:-Math.PI / 2, y:0 } },
   { id:'sitLong', label:'긴 테이블에 앉기', x:4.4, z:5.1, lvl:0, r:.8, sit:{ x:4.1, z:5.95, yaw:Math.PI, y:0 } },
-  { id:'dessert', label:'디저트 포스터 보기', x:13.7, z:2.3, lvl:1, r:1.0 },
+  { id:'dessert', label:'디저트 포스터 보기', x:14.45, z:6.15, lvl:1, r:.8 },
   { id:'sit15', label:'창가 테이블에 앉기', x:14.9, z:4.15, lvl:1, r:.8, sit:{ x:15.62, z:3.9, yaw:-Math.PI / 2, y:F15 } },
   { id:'sitBig', label:'큰 테이블에 앉기', x:15.1, z:6.6, lvl:1, r:.8, sit:{ x:16.17, z:7.27, yaw:Math.PI, y:F15, stool:true } },
 ];
