@@ -218,7 +218,7 @@ const M = {
   grass: S({ color:'#7aa35a', roughness:1 }),
   corridorWall: S({ color:'#e2e0dc', roughness:.8 }),
   bldg: S({ map:windowsTex, roughness:.9 }),
-  bag: S({ color:'#bcd7ec', roughness:.7 }),
+  bag: S({ color:'#8dbde6', roughness:.75 }),
   juiceA: S({ color:'#f2a03a', roughness:.2, transparent:true, opacity:.9 }),
   juiceB: S({ color:'#d8344a', roughness:.2, transparent:true, opacity:.9 }),
   juiceC: S({ color:'#f3cf3c', roughness:.2, transparent:true, opacity:.9 }),
@@ -519,8 +519,8 @@ B(-.15, 0, 0, 0, H, 7, M.pink); col(-.3, 0, .05, 16);
   B(9.8, .9, 5.6, 12.4, .95, 6.4, M.top);
   for (const [x, z] of [[9.85, 5.65], [12.35, 5.65], [9.85, 6.35], [12.35, 6.35]]) B(x - .02, 0, z - .02, x + .02, .9, z + .02, M.steel);
   B(9.85, .25, 5.63, 12.35, .28, 5.67, M.steel); B(9.85, .25, 6.33, 12.35, .28, 6.37, M.steel);
-  for (let i = 0; i < 5; i++){ const x = 10.1 + i * .5; B(x - .18, .95, 5.8, x + .18, 1.25, 5.95, M.bag); }
-  for (let i = 0; i < 4; i++){ const x = 10.3 + i * .55; B(x - .17, .95, 6.1, x + .17, 1.05, 6.3, M.navy); }
+  for (let i = 0; i < 5; i++){ const x = 10.15 + i * .48; B(x - .13, .95, 5.82, x + .13, 1.26, 5.92, M.bag); put(new THREE.TorusGeometry(.06, .007, 6, 16, Math.PI), M.bag, x, 1.26, 5.87); }
+  for (let i = 0; i < 4; i++){ const x = 10.35 + i * .55; B(x - .17, .95, 6.05, x + .17, 1.11, 6.3, M.navy); }
   col(9.75, 5.55, 12.45, 6.45, 0);
 }
 // 홀 테이블
@@ -561,7 +561,7 @@ floorLamp(6.2, 15.3, 3.2);
 for (const x of [9.5, 11.6, 13.7, 15.8]) pendant(x, 3.75, 9.75, .27, H - .3, true);
 for (const [x, y, z, r] of [[10.6, 4.2, 3.4, .3], [15.6, 4.0, 2.9, .3], [18.4, 3.6, 6.5, .28], [20.6, 3.1, 3.4, .24], [20.9, 3.3, 8.6, .26], [19.6, 3.5, 14.6, .28], [21.1, 2.9, 15.0, .22], [8.2, 4.6, 6.0, .3]]) pendant(x, y, z, r, H - .3);
 for (const [x, z] of [[2.2, 10.8], [5.0, 12.2], [5.0, 9.0], [2.0, 14.2]]) pendant(x, 2.35, z, .2, 2.98);
-for (const [x, y, z, r] of [[2.2, 5.1, 10.2, .34], [4.6, 5.3, 12.6, .36], [3.0, 5.2, 15.0, .3], [4.8, 5.0, 8.6, .3]]) pendant(x, y, z, r, H - .3);
+for (const [x, y, z, r] of [[2.2, 5.85, 10.2, .3], [4.6, 5.9, 12.6, .32], [3.0, 5.8, 15.0, .28], [4.8, 5.85, 8.6, .26]]) pendant(x, y, z, r, H - .3);
 
 // 바깥: 거리 · 나무 · 건물
 {
