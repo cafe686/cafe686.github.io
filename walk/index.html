@@ -906,7 +906,7 @@ function noteTap(cx, cy){
   _ndc.set(cx / innerWidth * 2 - 1, -(cy / innerHeight) * 2 + 1);
   _ray.setFromCamera(_ndc, camera);
   const skip = new Set([pinGroup, ...SPOTS.map(s => s.ring)]);
-  const hit = _ray.intersectObjects(scene.children, true).find(h => { let o = h.object; while (o){ if (skip.has(o)) return false; o = o.parent; } return h.object.visible !== false; });
+  const hit = _ray.intersectObjects(scene.children, true).find(h => { let o = h.object; while (o){ if (skip.has(o)) return false; o = o.parent; } return h.object.visible !== false && h.object.material !== M.glass; });
   if (!hit) return;
   const p = hit.point; pending = { x:p.x, y:p.y, z:p.z, area:areaName(p.x, p.y, p.z) };
   document.getElementById('noteWhere').textContent = '선택한 곳 · ' + pending.area;
