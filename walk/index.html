@@ -595,7 +595,7 @@ for (const [mat, geos] of [...buckets, ...RAW]){
   const see = mat === M.glass || mat === M.glow || mat === M.led || mat === M.panelLight;
   mesh.castShadow = !see; mesh.receiveShadow = mat !== M.glass;
   if (mat === M.glass) mesh.renderOrder = 2;
-  if ([M.pink, M.ceil, M.mint].includes(mat)) OCC.push(mesh);
+  if ([M.pink, M.ceil, M.mint, M.corridorWall].includes(mat)) OCC.push(mesh);
   scene.add(mesh);
 }
 
@@ -646,7 +646,7 @@ function makeChar(color, hairIdx = 0, apron = false){
 }
 // 매장 안 사람들
 const NPC = [];
-function seatNPC(color, hair, x, z, ang, y = 0){ const c = makeChar(color, hair); c.sit = true; c.root.position.set(x, y + .02, z + Math.cos(ang) * .04); c.root.rotation.y = ang; NPC.push({ c }); }
+function seatNPC(color, hair, x, z, ang, y = 0){ const c = makeChar(color, hair); c.sit = true; c.root.position.set(x - Math.sin(ang) * .1, y + .02, z - Math.cos(ang) * .1); c.root.rotation.y = ang; NPC.push({ c }); }
 seatNPC('#e8899c', 1, 1.9, 6.82, Math.PI / 2);
 seatNPC('#4fae9a', 2, 6.06, .35, -Math.PI / 2);
 seatNPC('#e07a3f', 3, 3.5, 5.95, Math.PI);
@@ -677,7 +677,7 @@ for (const s of SPOTS){
 }
 
 /* ================= 움직임 · 카메라 ================= */
-const START = { x:9.3, z:-1.7, yaw:Math.PI };
+const START = { x:9.3, z:-.9, yaw:Math.PI };
 const P = { x:START.x, z:START.z, feet:0, yaw:START.yaw, camYaw:START.yaw, camPitch:-.3, sit:null, mode:'third', speed:0 };
 let me = null;
 const keys = {}; let joyV = { x:0, y:0 };
@@ -717,7 +717,8 @@ function applyCam(){
   if (me){
     me.root.visible = P.mode === 'third';
     me.sit = !!P.sit;
-    me.root.position.set(sx, sy + (P.sit ? (P.sit.stool ? .0 : .02) : 0), sz);
+    const fo = P.sit ? .1 : 0, fy = P.sit ? P.sit.yaw : 0;
+    me.root.position.set(sx - Math.sin(fy) * fo, sy + (P.sit ? .02 : 0), sz - Math.cos(fy) * fo);
     me.root.rotation.y = P.sit ? P.sit.yaw : P.yaw;
   }
   if (P.mode === 'first'){
