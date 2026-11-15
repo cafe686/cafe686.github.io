@@ -558,6 +558,7 @@ for (const [x, y, z, r] of [[13.35, 3.45, 5.06, .24], [13.35, 3.45, 7.2, .24], [
   for (let z = -10; z < 34; z += 6) B(-12.1, -.02, z, -11.9, -.015, z + 3, M.white);
   B(-6, -.07, 7.9, 32, -.02, 40, M.grass); B(17.97, -.07, -6, 40, -.02, 9.5, M.grass);
   B(-1.6, 0, 4.0, -.35, 1.0, 7.9, M.hedge); B(-1.6, 0, -.3, -.35, 1.0, 1.7, M.hedge);
+  col(-1.6, 4.0, -.35, 7.9); col(-1.6, -.3, -.35, 1.7); col(-30, -10, -2.6, 40); col(-2.7, -6, -1, 0); col(-2.7, 8.0, 0, 40);
   { const r = rnd(42); for (let i = 0; i < 50; i++) sphere(-.4 - r() * .15, .5 + r() * .45, 4.1 + r() * 3.7, .07 + r() * .05, M.azalea, 1, 6); }
   for (let z = -3; z < 30; z += 4.6) tree(-3.4, z, 1);
   for (let x = 0; x < 22; x += 4.4) tree(x, 12.5, .95);
@@ -594,7 +595,7 @@ for (const [mat, geos] of [...buckets, ...RAW]){
   const see = mat === M.glass || mat === M.glow || mat === M.led || mat === M.panelLight;
   mesh.castShadow = !see; mesh.receiveShadow = mat !== M.glass;
   if (mat === M.glass) mesh.renderOrder = 2;
-  if ([M.pink, M.ceil, M.mint, M.corridorWall].includes(mat)) OCC.push(mesh);
+  if ([M.pink, M.ceil, M.mint].includes(mat)) OCC.push(mesh);
   scene.add(mesh);
 }
 
@@ -676,7 +677,7 @@ for (const s of SPOTS){
 }
 
 /* ================= 움직임 · 카메라 ================= */
-const START = { x:9.3, z:-2.6, yaw:Math.PI };
+const START = { x:9.3, z:-1.7, yaw:Math.PI };
 const P = { x:START.x, z:START.z, feet:0, yaw:START.yaw, camYaw:START.yaw, camPitch:-.3, sit:null, mode:'third', speed:0 };
 let me = null;
 const keys = {}; let joyV = { x:0, y:0 };
@@ -795,7 +796,7 @@ function updateUI(t){
   const lvl = P.feet > .7 ? 1 : 0;
   for (const s of SPOTS){ const k = 1 + Math.sin(t * 3 + s.x) * .12; s.ring.scale.set(k, k, k); s.ring.visible = !P.sit; }
   ringMat.opacity = .55 + Math.sin(t * 3) * .25;
-  const w = P.z < 0 && !P.sit ? '입구 로비' : ((P.sit ? P.sit.y : P.feet) > .7 ? '1.5층' : '1층');
+  const w = P.x < 0 && !P.sit ? '매장 앞 거리' : P.z < 0 && !P.sit ? '입구 로비' : ((P.sit ? P.sit.y : P.feet) > .7 ? '1.5층' : '1층');
   if (w !== whereTxt){ whereTxt = w; where.innerHTML = `<b>Cafe 686</b>${CONTENT.store} · ${w}`; }
   if (P.sit) return;
   let best = null, bd = 1e9;
