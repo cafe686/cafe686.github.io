@@ -232,7 +232,7 @@ const M = {
   frame: S({ color:'#c9bfae', roughness:.6, envMapIntensity:.4 }),
   glass: new THREE.MeshPhysicalMaterial({ color:'#d6edf4', transparent:true, opacity:.18, roughness:.05, metalness:0, depthWrite:false, envMapIntensity:1.2, side:THREE.DoubleSide }),
   glassP: new THREE.MeshPhysicalMaterial({ color:'#cfe8f0', transparent:true, opacity:.3, roughness:.05, metalness:0, depthWrite:false, envMapIntensity:1.6, side:THREE.DoubleSide }),
-  mirror: S({ color:'#dfe6ea', metalness:1, roughness:.06, envMapIntensity:1.4 }),
+  mirror: S({ color:'#c6d4da', metalness:.35, roughness:.1, envMapIntensity:1.4, emissive:'#9fb2bb', emissiveIntensity:.25 }),
   glow: S({ color:'#ffffff', emissive:'#fff0d8', emissiveIntensity:1.7 }),
   led: S({ color:'#ffcf8a', emissive:'#ffa64a', emissiveIntensity:3 }),
   panelLight: S({ color:'#ffffff', emissive:'#ffffff', emissiveIntensity:1.4 }),
