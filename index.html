@@ -234,6 +234,7 @@ var SHEETS=[
   {id:"coupang",name:"쿠팡",short:"쿠팡"},
   {id:"costco",name:"코스트코",short:"코스트코"},
   {id:"milk",name:"우유·치즈",short:"우유·치즈"},
+  {id:"takeout",name:"테이크아웃 (컵·뚜껑)",short:"테이크아웃"},
   {id:"etc",name:"기타 (치아바타·식용유·마기소스)",short:"기타",grouped:true}];
 function sheetOf(id){for(var i=0;i<SHEETS.length;i++)if(SHEETS[i].id===id)return SHEETS[i];return SHEETS[0]}
 var BR={
@@ -242,11 +243,12 @@ var BR={
   coupang:[{t:"쿠팡",items:["김치볶음밥","햇반","알감자"]}],
   costco:[{t:"코스트코",items:["빠다노치즈","리조또소스","바질소스","마리나라소스","발사믹소스","글레이즈","월계수잎"]}],
   milk:[{t:"우유·치즈",items:["크림치즈","리코타치즈","부라타치즈","펠렛치즈",{n:"갈바니치즈",only:"ys"}]}],
+  takeout:[{t:"컵",items:[{n:"아이스컵",u:"줄",r:{ys:4}},{n:"핫컵",u:"줄",r:{ys:3}}]},{t:"뚜껑",items:[{n:"아이스 뚜껑 (플랫형)",u:"줄",r:{ys:2},m:"소진 후 스무디 뚜껑으로 대체 가능"},{n:"스무디 뚜껑",u:"줄",r:{ys:1}}]}],
   etc:[{t:"치아바타",items:["먹물치아바타"]},{t:"식용유",items:["식용유 말통"]},{t:"네이버",items:["마기소스"]}]};
 function defaults(store,sheet){
   if(!sheet||sheet==="powder"||!BR[sheet])return powderDefaults(store);
   return {etc:"",secs:BR[sheet].map(function(sec){return {t:sec.t,head:true,items:sec.items.filter(function(x){return !x.only||x.only===store}).map(function(x){
-    return typeof x==="string"?{n:x,o:0,r:0,m:"",p:0}:{n:x.n,o:0,r:0,m:x.m||"",p:0,u:x.u||"개"}})}})};
+    return typeof x==="string"?{n:x,o:0,r:0,m:"",p:0}:{n:x.n,o:0,r:(x.r&&x.r[store])||0,m:(x.r&&!x.r[store])?"":(x.m||""),p:0,u:x.u||"개"}})}})};
 }
 function headLine(storeName,sheet,date){var sh=sheetOf(sheet);return "("+storeName+" 발주 "+date+(sh.id==="powder"?"":" · "+sh.short)+")"}
 function today(d){return (d.getMonth()+1)+"/"+d.getDate()}
